@@ -17,6 +17,7 @@ Use `@mention` (Claude) or subagent spawn + skill activate (Codex) to invoke dom
 | `sdlc-kit-api-designer` | API 설계 | REST/GraphQL/gRPC, versioning, contract evolution |
 | `sdlc-kit-devops-expert` | DevOps / Observability | CI/CD, Docker, monitoring, incident response |
 | `sdlc-kit-security-reviewer` | 보안 | OWASP Top 10, secret scanning, vulnerability assessment |
+| `sdlc-kit-challenger` | 비판적 검토 | Blind spot detection, assumption challenge, cross-skill reference |
 | `sdlc-kit-core` | Clean Code / Git | Always-on coding standards (always loaded) |
 
 ## Modules (Deep Reference)

@@ -33,7 +33,7 @@ if [ ! -f "$SDLC_KIT/AGENTS.md" ]; then
 fi
 
 # ── Skill definitions (bash 3.2 compatible) ──
-SKILL_DIRS="architect tdd-expert kotlin-expert python-expert spring-expert frontend-expert database-expert api-designer devops-expert security-reviewer core"
+SKILL_DIRS="architect tdd-expert kotlin-expert python-expert spring-expert frontend-expert database-expert api-designer devops-expert security-reviewer challenger core"
 
 skill_name() {
   echo "sdlc-kit-$1"
