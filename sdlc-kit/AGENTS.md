@@ -1,53 +1,44 @@
-# Software Engineering Guidelines
+# SDLC Harness — Software Engineering Guidelines
 
-## 설계 (Design)
-ADR(Architecture Decision Records)로 결정을 문서화. C4 모델로 시스템 구조화. 변경 전에 설계 검토.
-상세: `@architect` 호출 또는 `modules/01-design.md` 참고.
+SDLC skills are auto-discovered by Codex (`~/.agents/skills/`) and Claude Code (`~/.claude/skills/`).
+Use `@mention` (Claude) or subagent spawn + skill activate (Codex) to invoke domain expertise.
 
-## 아키텍처 (Architecture)
-기술 선정 기준과 패턴. MySQL(트랜잭션/RDBMS), MongoDB(유연스키마), Kafka(이벤트소싱/스트림), Elasticsearch(검색/로그), Neo4j(그래프).
-상세: `@architect` 호출 또는 `modules/02-architecture.md` 참고.
+## Available Skills
 
-## Kotlin
-Kotlin idioms: null safety, sealed types, immutability, structured concurrency. Clean architecture — domain 순수 Kotlin 유지.
-상세: `@kotlin-expert` 호출 또는 `modules/03-programming-kotlin.md` 참고.
+| Skill | Domain | Description |
+|-------|--------|-------------|
+| `sdlc-kit-architect` | 설계 / 아키텍처 | C4 modeling, ADRs, tech selection, system design |
+| `sdlc-kit-kotlin-expert` | Kotlin | Idiomatic Kotlin, null safety, coroutines, sealed types |
+| `sdlc-kit-spring-expert` | Spring | DI patterns, configuration, testing, security |
+| `sdlc-kit-python-expert` | Python | Pythonic idioms, type hints, composition |
+| `sdlc-kit-frontend-expert` | Frontend | Component architecture, state management, a11y, perf |
+| `sdlc-kit-tdd-expert` | TDD | RED-GREEN-REFACTOR cycle, testing strategy |
+| `sdlc-kit-database-expert` | 데이터 | Schema design, query optimization, migration |
+| `sdlc-kit-api-designer` | API 설계 | REST/GraphQL/gRPC, versioning, contract evolution |
+| `sdlc-kit-devops-expert` | DevOps / Observability | CI/CD, Docker, monitoring, incident response |
+| `sdlc-kit-security-reviewer` | 보안 | OWASP Top 10, secret scanning, vulnerability assessment |
+| `sdlc-kit-core` | Clean Code / Git | Always-on coding standards (always loaded) |
 
-## Spring
-Spring Framework & Boot: DI 패턴, 구성 관리, 트랜잭션, 테스팅, Security, REST API 구조. 스프링 방식의 모범 사례와 안티패턴 리뷰.
-상세: `@spring-expert` 호출 참고.
+## Modules (Deep Reference)
 
-## Frontend
-Component architecture, state management, 렌더링 성능, 접근성(a11y), 번들 최적화. 프레임워크 독립적인 프론트엔드 모범 사례.
-상세: `@frontend-expert` 호출 참고.
+Detailed SDLC phase documentation in `modules/`:
 
-## Python
-Pythonic idioms: Zen of Python, 명시적 타입힌트, composition over inheritance, EAFP vs LBYL.
-상세: `@python-expert` 호출 또는 `modules/04-programming-python.md` 참고.
+| File | Topic |
+|------|-------|
+| `modules/01-design.md` | Design methodology & ADR templates |
+| `modules/02-architecture.md` | Architecture patterns & tech selection deep dive |
+| `modules/03-programming-kotlin.md` | Kotlin advanced idioms & patterns |
+| `modules/04-programming-python.md` | Python advanced patterns |
+| `modules/05-testing-tdd.md` | TDD deep reference |
+| `modules/06-clean-code.md` | Clean code extended reference |
+| `modules/07-security.md` | Security deep reference |
+| `modules/08-devops.md` | DevOps practices deep reference |
+| `modules/09-observability.md` | Observability patterns deep reference |
 
-## TDD (Test-Driven Development)
-RED(실패테스트) → GREEN(최소코드) → REFACTOR. Small/Medium/Large 테스트 계층. Testcontainers로 통합테스트. `Thread.sleep()` 금지.
-상세: `@tdd-expert` 호출 또는 `modules/05-testing-tdd.md` 참고.
+## How Skills Activate
 
-## 데이터 (Database)
-Schema 설계, query 최적화, index 전략, migration, storage 선정. 정규화 vs 비정규화 트레이드오프.
-상세: `@database-expert` 호출 참고.
-
-## API 설계
-RESTful 리소스 모델링, GraphQL 스키마, gRPC/Protobuf, 버저닝 전략, 호환성, 에러 모델.
-상세: `@api-designer` 호출 참고.
-
-## Clean Code
-함수는 한가지 일, 20줄 이하. Early return, Command-Query Separation. Boolean은 `is/has` 접두사. 생성자 주입만. 주석은 Why만.
-상세: `rules/06-clean-code.md` 또는 `modules/06-clean-code.md` 참고.
-
-## 보안 리뷰 (Security)
-Pre-commit 시크릿 스캔. SQL/NoSQL Injection, XSS, IDOR, 인증/인가 체크리스트. OWASP Dependency-Check.
-상세: `@security-reviewer` 호출 또는 `modules/07-security.md` 참고.
-
-## DevOps
-Multi-stage Docker, Trunk-Based Development, Semantic Versioning. PR: lint→type→test→build. Merge: staging→E2E→production.
-상세: `@devops-expert` 호출 또는 `modules/08-devops.md` 참고.
-
-## Observability
-3 Sigils: 로그(ELK/Loki, JSON+traceID), 메트릭(Prometheus+Grafana), 트레이스(OpenTelemetry+Jaeger). 장애대응: 감지→분류→에스컬레이션→디버깅→Postmortem.
-상세: `@devops-expert` 호출 또는 `modules/09-observability.md` 참고.
+| Tool | Mechanism |
+|------|-----------|
+| **Codex** | Auto-discovered in `~/.agents/skills/`. Activate via subagent TOML (`skills.config`) or implicit matching |
+| **Claude Code** | Auto-discovered in `~/.claude/skills/`. Invoke via `@sdlc-kit-architect` or implicit description matching |
+| **Both** | `sdlc-kit-core` loads always (clean code + git conventions); domain skills load on demand only |
