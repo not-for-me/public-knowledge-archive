@@ -188,32 +188,9 @@ Structure findings as: Severity → Location → Description → Impact → Reme
 AGENTEOF
 echo "  ✅ security-reviewer"
 
-# ── 3. Claude Code Agents (@mention subagent) ──
+# ── 3. Claude Code Rules (always-on) ──
 echo ""
-echo "[3/4] Claude Code Agents → ~/.claude/agents/"
-
-mkdir -p "$HOME/.claude/agents"
-
-for dir in $SKILL_DIRS; do
-  [ "$dir" = "core" ] && continue  # core is always-on via rules, not @mention
-  skill_name="$(skill_name "$dir")"
-  cat > "$HOME/.claude/agents/$skill_name.md" << AGENTEOF
-# $skill_name
-
-You are an expert activated via \`@$skill_name\`.
-The \`$skill_name\` skill is auto-loaded when invoked.
-
-See \`~/.claude/skills/$skill_name/SKILL.md\` for full instructions.
-
-Use the Observation → Assessment → Opinion → Suggestion structure.
-You are not a gatekeeper — provide informed opinions; the team makes the final call.
-AGENTEOF
-  echo "  ✅ $skill_name"
-done
-
-# ── 4. Claude Code Rules (always-on) ──
-echo ""
-echo "[4/4] Claude Code Rules → ~/.claude/rules/"
+echo "[3/4] Claude Code Rules → ~/.claude/rules/"
 
 mkdir -p "$HOME/.claude/rules"
 CORE_SRC="$SDLC_KIT/skills/core/SKILL.md"
@@ -226,9 +203,15 @@ else
   echo "  ⚠  core skill not found — skipping rules"
 fi
 
-# ── 5. Cross-platform AGENTS.md (Codex) ──
+# Clean up old Claude agents (not needed — skills auto-discover)
+if [ -d "$HOME/.claude/agents" ]; then
+  rm -f "$HOME/.claude/agents/sdlc-kit-"*.md "$HOME/.claude/agents/architect.md" "$HOME/.claude/agents/tdd-expert.md" "$HOME/.claude/agents/kotlin-expert.md" "$HOME/.claude/agents/python-expert.md" "$HOME/.claude/agents/spring-expert.md" "$HOME/.claude/agents/frontend-expert.md" "$HOME/.claude/agents/database-expert.md" "$HOME/.claude/agents/api-designer.md" "$HOME/.claude/agents/devops-expert.md" "$HOME/.claude/agents/security-reviewer.md" 2>/dev/null
+  echo "  🧹 cleaned up old ~/.claude/agents/"
+fi
+
+# ── 4. Cross-platform AGENTS.md (Codex) ──
 echo ""
-echo "[extra] Codex: ~/.codex/AGENTS.md"
+echo "[4/4] Codex: ~/.codex/AGENTS.md"
 mkdir -p "$HOME/.codex"
 if [ -f "$HOME/.codex/AGENTS.md" ] && [ ! -L "$HOME/.codex/AGENTS.md" ]; then
   echo "  ⚠  ~/.codex/AGENTS.md exists as a regular file — backing up"
@@ -237,9 +220,9 @@ fi
 ln -sf "$SDLC_KIT/AGENTS.md" "$HOME/.codex/AGENTS.md"
 echo "  ✅ symlinked: ~/.codex/AGENTS.md → $SDLC_KIT/AGENTS.md"
 
-# ── 6. Claude CLAUDE.md (@import) ──
+# ── 5. Claude CLAUDE.md (@import) ──
 echo ""
-echo "[extra] Claude: ~/.claude/CLAUDE.md"
+echo "[5/5] Claude: ~/.claude/CLAUDE.md"
 mkdir -p "$HOME/.claude"
 CLAUDE_REL="../.codex/AGENTS.md"
 cat > "$HOME/.claude/CLAUDE.md" << CLAUDE
@@ -265,7 +248,6 @@ echo ""
 echo "  Codex Skills:   ~/.agents/skills/sdlc-kit-*/"
 echo "  Codex Agents:   ~/.codex/agents/*.toml"
 echo "  Claude Skills:  ~/.claude/skills/sdlc-kit-*/"
-echo "  Claude Agents:  ~/.claude/agents/*.md"
 echo "  Claude Rules:   ~/.claude/rules/"
 echo ""
 echo "  Update:  git -C $SDLC_KIT pull && bash $0"
