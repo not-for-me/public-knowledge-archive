@@ -32,29 +32,19 @@ if [ ! -f "$SDLC_KIT/AGENTS.md" ]; then
   exit 1
 fi
 
-# ── Skill definitions ──
-declare -A SKILL_NAMES=(
-  [architect]="sdlc-kit-architect"
-  [tdd-expert]="sdlc-kit-tdd-expert"
-  [kotlin-expert]="sdlc-kit-kotlin-expert"
-  [python-expert]="sdlc-kit-python-expert"
-  [spring-expert]="sdlc-kit-spring-expert"
-  [frontend-expert]="sdlc-kit-frontend-expert"
-  [database-expert]="sdlc-kit-database-expert"
-  [api-designer]="sdlc-kit-api-designer"
-  [devops-expert]="sdlc-kit-devops-expert"
-  [security-reviewer]="sdlc-kit-security-reviewer"
-  [core]="sdlc-kit-core"
-)
+# ── Skill definitions (bash 3.2 compatible) ──
+SKILL_DIRS="architect tdd-expert kotlin-expert python-expert spring-expert frontend-expert database-expert api-designer devops-expert security-reviewer core"
 
-SKILL_DIRS="${!SKILL_NAMES[*]}"  # space-separated
+skill_name() {
+  echo "sdlc-kit-$1"
+}
 
 # ── 1. Install Skills (Codex + Claude Code) ──
 echo ""
 echo "[1/4] Skills → Codex (~/.agents/skills/) + Claude (~/.claude/skills/)"
 
 for dir in $SKILL_DIRS; do
-  skill_name="${SKILL_NAMES[$dir]}"
+  skill_name="$(skill_name "$dir")"
   src="$SDLC_KIT/skills/$dir/SKILL.md"
   [ -f "$src" ] || { echo "  ⚠  SKILL.md not found: $src — skipping"; continue; }
 
@@ -206,7 +196,7 @@ mkdir -p "$HOME/.claude/agents"
 
 for dir in $SKILL_DIRS; do
   [ "$dir" = "core" ] && continue  # core is always-on via rules, not @mention
-  skill_name="${SKILL_NAMES[$dir]}"
+  skill_name="$(skill_name "$dir")"
   cat > "$HOME/.claude/agents/$skill_name.md" << AGENTEOF
 # $skill_name
 
